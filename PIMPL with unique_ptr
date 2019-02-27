@@ -1,0 +1,48 @@
+#include <memory>
+
+/////////////// MyClass.h file - Public interface of the library "MyLib"
+
+namespace UniquePtrPimpl
+{
+    class MyClass
+    {
+    public:
+        MyClass();
+        ~MyClass();
+        void Foo();
+    private:
+        class MyClassImpl;
+        std::unique_ptr<MyClassImpl> m_pimpl;
+    };
+}
+
+/////////////// MyClassImpl.h file - private header next to source files
+
+  #include <iostream>
+  #include <MyLib/MyClass.h>
+
+namespace UniquePtrPimpl
+{
+  class MyClass::MyClassImpl
+  {
+  public:
+      void Foo()
+      {
+          std::cout << "Foo inside MyClassImpl" << std::endl;
+      }
+  };
+
+}
+
+/////////////// MyClassImpl.cpp file
+
+using namespace MyClassImpl;
+using namespace MyClass;
+
+
+MyClass::MyClass() = default;
+MyClass::~MyClass() = default; 
+void MyClass::Foo()
+{
+    m_pimpl->Foo();
+}
